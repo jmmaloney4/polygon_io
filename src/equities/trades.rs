@@ -208,8 +208,10 @@ impl Client {
 
 #[cfg(test)]
 mod trades {
-	use crate::{client::Client, equities::trades::TradesParams};
-	use crate::equities::trades::MAX_LIMIT;
+	use crate::{
+		client::Client,
+		equities::trades::{TradesParams, MAX_LIMIT}
+	};
 
 	#[test]
 	fn appl_2004_works() {

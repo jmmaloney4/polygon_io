@@ -8,8 +8,7 @@ use crate::{
 	with_param
 };
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::io;
+use std::{collections::HashMap, io};
 
 const MAX_LIMIT: usize = 50_000;
 
@@ -38,10 +37,10 @@ pub struct NBBO {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct NBBOsResponse {
-	pub results: Vec<NBBO>,
+	pub results:  Vec<NBBO>,
 	pub next_url: Option<String>,
 	pub status:   String, // For debugging
-	pub uri:     Option<String>
+	pub uri:      Option<String>
 }
 
 pub struct NBBOsParams<'a> {

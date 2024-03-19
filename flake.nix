@@ -24,19 +24,21 @@
     };
 
     ### Rust Inputs ###
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.rust-analyzer-src.follows = "";
-    };
-
     crane = {
       url = "github:ipetkov/crane";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ### Jupyter ###
-    jupyenv.url = "github:tweag/jupyenv";
+    dream2nix = {
+      url = "github:davhau/dream2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.rust-analyzer-src.follows = "";
+    };
   };
 
   outputs = {
@@ -48,9 +50,9 @@
     pre-commit-hooks,
     systems,
     treefmt,
-    fenix,
     crane,
-    jupyenv,
+    dream2nix,
+    fenix,
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} ({
       withSystem,
@@ -95,6 +97,7 @@
             ];
             buildInputs = with pkgs; [
               self'.packages.toolchain
+              cmake
             ];
           };
 
