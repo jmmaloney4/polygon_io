@@ -1,3 +1,6 @@
 /target
 /logs
 polygon.json
+
+.pre-commit-config.yaml
+.direnv/
