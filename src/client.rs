@@ -46,9 +46,9 @@ pub struct Client {
 
 impl Client {
 	pub fn new(
-		key: Option<impl Into<String>>,
-		api_uri: Option<impl Into<String>>,
-		stream_uri: Option<impl Into<String>>,
+		key: impl Into<Option<String>>,
+		api_uri: impl Into<Option<String>>,
+		stream_uri: impl Into<Option<String>>,
 		timeout: Option<u64>
 	) -> Result<Client> {
 		let agent: Agent = AgentBuilder::new()
@@ -58,15 +58,15 @@ impl Client {
 
 		Ok(Client {
 			agent,
-			key: match key {
+			key: match key.into() {
 				Some(key) => key.into(),
 				None => env::var("POLYGON_KEY").map_err(|_| Error::MissingEnv("POLYGON_KEY".to_string()))?
 			},
-			api_uri: match api_uri {
+			api_uri: match api_uri.into() {
 				Some(uri) => uri.into(),
 				None => env::var("POLYGON_API_URI").unwrap_or("https://api.polygon.io".to_string())
 			},
-			stream_uri: match stream_uri {
+			stream_uri: match stream_uri.into() {
 				Some(uri) => uri.into(),
 				None => env::var("POLYGON_STREAM_URI").unwrap_or("wss://socket.polygon.io".to_string())
 			}
