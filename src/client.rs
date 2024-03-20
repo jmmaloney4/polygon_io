@@ -46,9 +46,9 @@ pub struct Client {
 
 impl Client {
 	pub fn new(
-		key: Option<String>,
-		api_uri: Option<String>,
-		stream_uri: Option<String>,
+		key: Option<impl Into<String>>,
+		api_uri: Option<impl Into<String>>,
+		stream_uri: Option<impl Into<String>>,
 		timeout: Option<u64>
 	) -> Result<Client> {
 		let agent: Agent = AgentBuilder::new()
@@ -56,17 +56,20 @@ impl Client {
 			.timeout_write(Duration::from_secs(timeout.unwrap_or(5)))
 			.build();
 
-		let key = key.unwrap_or(
-			env::var("POLYGON_KEY").map_err(|_| Error::MissingEnv("POLYGON_KEY".to_string()))?
-		);
-		let api_uri = api_uri.unwrap_or(String::from("https://api.polygon.io"));
-		let stream_uri = stream_uri.unwrap_or(String::from("wss://socket.polygon.io"));
-
 		Ok(Client {
 			agent,
-			key,
-			api_uri,
-			stream_uri
+			key: match key {
+				Some(key) => key.into(),
+				None => env::var("POLYGON_KEY").map_err(|_| Error::MissingEnv("POLYGON_KEY".to_string()))?
+			},
+			api_uri: match api_uri {
+				Some(uri) => uri.into(),
+				None => env::var("POLYGON_API_URI").unwrap_or("https://api.polygon.io".to_string())
+			},
+			stream_uri: match stream_uri {
+				Some(uri) => uri.into(),
+				None => env::var("POLYGON_STREAM_URI").unwrap_or("wss://socket.polygon.io".to_string())
+			}
 		})
 	}
 
